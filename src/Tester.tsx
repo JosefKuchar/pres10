@@ -9,6 +9,8 @@ interface ITesterState {
   unknown: number;
   numbers: number[];
   error: boolean;
+  count: number;
+  good: number;
 }
 
 function getRandom(min: number, max: number) {
@@ -22,7 +24,9 @@ export default class Tester extends React.Component<{}, ITesterState> {
     plus: true,
     unknown: 0,
     numbers: [0, 0, 0],
-    error: false
+    error: false,
+    count: -1,
+    good: 0,
   }
 
   generateNumbers() {
@@ -36,12 +40,20 @@ export default class Tester extends React.Component<{}, ITesterState> {
       unknown: Math.floor(Math.random() * 3),
       numbers: plus ? [a, b, c] : [c, a, b],
       error: false,
+      count: this.state.count + 1,
     })
   }
 
   handle(right: boolean) {
     if (right) {
-      this.generateNumbers();
+      if (!this.state.error) {
+        this.setState({
+          ...this.state,
+          good: this.state.good + 1,
+        }, () => this.generateNumbers());
+      } else {
+        this.generateNumbers();
+      }
     } else {
       this.setState({
         ...this.state,
@@ -69,6 +81,7 @@ export default class Tester extends React.Component<{}, ITesterState> {
       <Num value={this.state.numbers[2]} hidden={this.state.unknown === 2} handle={this.handle.bind(this)} />
       <br></br>
       <Slider step={1} min={11} max={18} valueLabelDisplay="auto" defaultValue={13} onChange={this.changeMax.bind(this)} style={{ width: 200, paddingTop: 100}}></Slider>
+      <Typography variant="h6">Správně {this.state.good} / {this.state.count}</Typography>
     </div>
   }
 
