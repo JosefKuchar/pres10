@@ -66,7 +66,10 @@ export default class Tester extends React.Component<{}, ITesterState> {
     if (val !== this.state.max) {
       this.setState({
         ...this.state,
-        max: val
+        max: val,
+        count: -1,
+        good: 0,
+        error: false,
       }, () => this.generateNumbers())
     }
   }
@@ -80,7 +83,7 @@ export default class Tester extends React.Component<{}, ITesterState> {
       <Typography variant="h6" style={{ display: 'inline' }}> = </Typography>
       <Num value={this.state.numbers[2]} hidden={this.state.unknown === 2} handle={this.handle.bind(this)} />
       <br></br>
-      <Slider step={1} min={11} max={18} valueLabelDisplay="auto" defaultValue={13} onChange={this.changeMax.bind(this)} style={{ width: 200, paddingTop: 100}}></Slider>
+      <Slider step={1} min={11} max={18} valueLabelDisplay="auto" defaultValue={18} onChange={this.changeMax.bind(this)} style={{ width: 200, paddingTop: 100}}></Slider>
       <Typography variant="h6">Správně {this.state.good} / {this.state.count}</Typography>
     </div>
   }
